@@ -6,10 +6,20 @@
 
 | Skill | 说明 | 使用场景 | 安装命令 |
 |-------|------|---------|---------|
-| [私董会（advisory-board）](skills/advisory-board/) | 12 位顶级思想家组成的商业决策智囊团 | 面临重大商业决策，需要多视角碰撞 | `npx skills add Backtthefuture/huangshu` |
-| [Social-SBTI（social-sbti）](skills/social-sbti/) | 基于社交媒体公开动态生成恶搞人格卡（27 型 × 15 维） | 给自己或公开公众人物做娱乐向人格画像 | `npx skills add Backtthefuture/huangshu` |
+| [私董会（advisory-board）](skills/advisory-board/) | 12 位顶级思想家组成的商业决策智囊团 | 面临重大商业决策，需要多视角碰撞 | `npx skills add Backtthefuture/huangshu --skill advisory-board` |
+| [Social-SBTI（social-sbti）](skills/social-sbti/) | 基于社交媒体公开动态生成恶搞人格卡（27 型 × 15 维） | 给自己或公开公众人物做娱乐向人格画像 | `npx skills add Backtthefuture/huangshu --skill social-sbti` |
 
-> 安装命令由 [Vercel Labs `skills`](https://github.com/vercel-labs/skills) 提供，运行后按提示选择 Skill、安装范围（全局 / 项目）和目标 Agent（Claude Code、Cursor、GitHub Copilot 等 40+ AI 编程助手）即可。
+> 安装命令由 [Vercel Labs `skills`](https://github.com/vercel-labs/skills) 提供。
+>
+> - 不加 `--skill` 参数（`npx skills add Backtthefuture/huangshu`）会弹出交互式选单，适合浏览全部 Skill。
+> - 加上 `--skill <name>` 可直接安装指定 Skill，跳过选单。
+> - 需要完全非交互（CI 场景）时追加 `-g -a claude-code -y`，例如：
+>
+>   ```bash
+>   npx skills add Backtthefuture/huangshu --skill social-sbti -g -a claude-code -y
+>   ```
+>
+> 运行后按提示选择安装范围（全局 / 项目）和目标 Agent（Claude Code、Cursor、GitHub Copilot 等 40+ AI 编程助手）即可。
 
 ## 🛠️ 工具（Tools）
 
