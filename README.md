@@ -2,21 +2,13 @@
 
 > 为 [Claude Code](https://docs.anthropic.com/en/docs/claude-code) 打造的实用 Skill，开箱即用。
 
-## 安装
-
-```bash
-npx skills add Backtthefuture/huangshu
-```
-
-按提示选择要安装的 Skill、安装范围（全局 / 项目）和目标 Agent 即可。
-
-> 支持 Claude Code、Cursor、GitHub Copilot 等 40+ AI 编程助手，由 [Vercel Labs](https://github.com/vercel-labs/agent-skills) 维护。
-
 ## Skill 目录
 
-| Skill | 说明 | 使用场景 |
-|-------|------|---------|
-| [私董会（advisory-board）](skills/advisory-board/) | 12 位顶级思想家组成的商业决策智囊团 | 面临重大商业决策，需要多视角碰撞 |
+| Skill | 说明 | 使用场景 | 安装命令 |
+|-------|------|---------|---------|
+| [私董会（advisory-board）](skills/advisory-board/) | 12 位顶级思想家组成的商业决策智囊团 | 面临重大商业决策，需要多视角碰撞 | `npx skills add Backtthefuture/huangshu` |
+
+> 安装命令由 [Vercel Labs `skills`](https://github.com/vercel-labs/skills) 提供，运行后按提示选择 Skill、安装范围（全局 / 项目）和目标 Agent（Claude Code、Cursor、GitHub Copilot 等 40+ AI 编程助手）即可。目前合集中只有 **advisory-board** 一个 Skill，命令会自动定位到它。
 
 ## 🛠️ 工具（Tools）
 
