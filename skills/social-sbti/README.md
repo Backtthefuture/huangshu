@@ -19,8 +19,14 @@
 作为 `huangshu` 合集的一部分,推荐命令:
 
 ```bash
+# 直接装 social-sbti,跳过选单
+npx skills add Backtthefuture/huangshu --skill social-sbti
+
+# 完全非交互(全局 + Claude Code)
+npx skills add Backtthefuture/huangshu --skill social-sbti -g -a claude-code -y
+
+# 或者浏览全部 Skill 后手动选
 npx skills add Backtthefuture/huangshu
-# 按提示选 social-sbti
 ```
 
 也可以手动:
