@@ -1,0 +1,28 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editors
+.vscode/
+.idea/
+*.swp
+
+# Skill 运行产物(跑到用户项目的 ./sbti-output/,不应该出现在 repo 里)
+sbti-output/
+
+# Skill 内部 data 目录:只保留参考样例 huangshu_scores.json
+skills/social-sbti/data/*
+!skills/social-sbti/data/huangshu_scores.json
+
+# Secrets
+.env
+*.token
+cookies.json
+twikit_cookies.json

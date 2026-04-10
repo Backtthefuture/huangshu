@@ -1,0 +1,178 @@
+{
+  "profile": {
+    "screen_name": "AI产品黄叔",
+    "platform": "jike",
+    "bio": "研究 AI 产品的",
+    "post_count": 200
+  },
+  "personality_description": "恭喜您,您测出了全中国最为罕见的 CTRL 人格。您是行走的人形自走任务管理器,普通人眼里的\"规则\"在您这只是出厂参数。从北京 All-in 跑到杭州做 Agent 社群,15 年产品经验,一手 Skills 一手课程,说干就干。您在 AI 编程赛道跑出独一档身位,不是因为比别人聪明,是因为您总在别人还在犹豫要不要起床时,已经完成了当天的 Ctrl+S。",
+  "overall_impression": "一位从北京跑去杭州 All-in Agent 的连续创业者,15 年产品经验打底,自称 INTP。对赛道、时机判断极度清晰,决策果断到意识到就 All-in。社群运营能力爆表(1800+ 付费学员),社交主动性拉满,每周都在线下聚会。极强的意义感加上\"规则为我所用\"的灵活度,让他在 AI 编程 Skills 这个小众赛道上跑出了独一档的身位。",
+  "quotes": [
+    "发明一个全世界只有我最胜任的职业——而且 AI 也替代不了的职业。",
+    "当你意识到提前的时候,超级激进,更激进。",
+    "下周有意无意的拒掉了三个去外地的活动,必须要找到适合自己的视频生产逻辑。",
+    "最近一个月烧了 3000 美金的 Token 玩 Skill,只能说自己强得可怕了。",
+    "昨晚社团全球首次线下聚会,30 个陌生人谈论 AI 编程,没一个人会写代码。"
+  ],
+  "scores": [
+    {
+      "dimension": "S1",
+      "level": "H",
+      "confidence": 0.9,
+      "evidence": [
+        "6953c49f",
+        "69bcf3c6"
+      ],
+      "reasoning": "『我真的牛』『强得可怕了』等自我肯定稳定高频,搭配自嘲也来自安全感"
+    },
+    {
+      "dimension": "S2",
+      "level": "H",
+      "confidence": 0.95,
+      "evidence": [
+        "693d62ce",
+        "6955d0db"
+      ],
+      "reasoning": "明确自称 INTP,清楚自己的天赋组合(Gallup信息搜集第一)"
+    },
+    {
+      "dimension": "S3",
+      "level": "H",
+      "confidence": 0.95,
+      "evidence": [
+        "6965dca0",
+        "69a2bfc2"
+      ],
+      "reasoning": "『All in Agent』『超级激进』,清晰 26 年 10000 付费用户目标"
+    },
+    {
+      "dimension": "E1",
+      "level": "H",
+      "confidence": 0.8,
+      "evidence": [
+        "68e5db74",
+        "69683adf"
+      ],
+      "reasoning": "关系中稳定信任,频繁面基,对合作方和朋友没有焦虑式依恋"
+    },
+    {
+      "dimension": "E2",
+      "level": "H",
+      "confidence": 0.85,
+      "evidence": [
+        "69451dfb",
+        "6938ebab"
+      ],
+      "reasoning": "对社群/用户/事业的情感卷入很深,常提『心流』『让我感慨』"
+    },
+    {
+      "dimension": "E3",
+      "level": "H",
+      "confidence": 0.85,
+      "evidence": [
+        "696f66f2",
+        "6938ebab"
+      ],
+      "reasoning": "强独立边界,拒掉三个活动,专注核心赛道,一人公司取向"
+    },
+    {
+      "dimension": "A1",
+      "level": "H",
+      "confidence": 0.75,
+      "evidence": [
+        "69683adf",
+        "6961ae42"
+      ],
+      "reasoning": "对人对机会持开放乐观态度,相信杭州真诚、相信社群善意"
+    },
+    {
+      "dimension": "A2",
+      "level": "L",
+      "confidence": 0.8,
+      "evidence": [
+        "694ca809",
+        "694f9eec"
+      ],
+      "reasoning": "极度规则灵活:北京跑杭州、否定传统学编程路径、自建 SOP"
+    },
+    {
+      "dimension": "A3",
+      "level": "H",
+      "confidence": 0.95,
+      "evidence": [
+        "6955d0db",
+        "695f1ddd"
+      ],
+      "reasoning": "极强意义感:『发明一个世界上只有我最胜任的职业』『AI 编程是思维方式』"
+    },
+    {
+      "dimension": "Ac1",
+      "level": "H",
+      "confidence": 0.9,
+      "evidence": [
+        "6965dca0",
+        "68fb501b"
+      ],
+      "reasoning": "动机强烈指向进取而非避险,主动下注 Skills 赛道"
+    },
+    {
+      "dimension": "Ac2",
+      "level": "H",
+      "confidence": 0.85,
+      "evidence": [
+        "69795fb5",
+        "694ca809"
+      ],
+      "reasoning": "决策果断,11 月决定发力、立刻去杭州开公司"
+    },
+    {
+      "dimension": "Ac3",
+      "level": "H",
+      "confidence": 0.95,
+      "evidence": [
+        "69d47322",
+        "6996aabb"
+      ],
+      "reasoning": "执行力拉满:春节旅游也在开发,日更视频,持续发课"
+    },
+    {
+      "dimension": "So1",
+      "level": "H",
+      "confidence": 0.95,
+      "evidence": [
+        "68e5db74",
+        "6947577d"
+      ],
+      "reasoning": "极强社交主动性:主动面基、组织线下、主持圆桌、到处分享"
+    },
+    {
+      "dimension": "So2",
+      "level": "M",
+      "confidence": 0.7,
+      "evidence": [
+        "6938ebab",
+        "694a9c53"
+      ],
+      "reasoning": "温暖开放但有明确工作边界,对社群亲近但不完全融合"
+    },
+    {
+      "dimension": "So3",
+      "level": "H",
+      "confidence": 0.7,
+      "evidence": [
+        "697eb0ab",
+        "68fb501b"
+      ],
+      "reasoning": "能在正经长文、商业复盘、段子、真情流露之间流畅切换"
+    }
+  ],
+  "pattern": "HHH-HHH-HLH-HHH-HMH",
+  "personality": {
+    "code": "CTRL",
+    "cn_name": "拿捏者",
+    "tagline": "怎么样,被我拿捏了吧?",
+    "mascot": "🎛️",
+    "template_pattern": "HHH-HMH-MHH-HHH-MHM",
+    "similarity": 77
+  }
+}

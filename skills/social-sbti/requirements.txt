@@ -1,0 +1,14 @@
+# Core: skill 模式下(Claude 本人打分),只需要 Python 标准库 + 可选渲染
+# match.py / make_card.py / personalities.py 全部零依赖
+
+# PNG 截图(可选):
+playwright>=1.40.0
+
+# 即刻 fetcher(可选):
+jike-skill[qr]>=0.1.0
+
+# X/Twitter fetcher(可选):
+twikit>=2.0.0
+
+# Standalone CLI 模式下用 Anthropic API 自动打分(可选,skill 模式不需要):
+anthropic>=0.40.0

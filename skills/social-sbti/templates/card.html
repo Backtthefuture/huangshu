@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>{{SCREEN_NAME}} · SBTI</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: -apple-system, "PingFang SC", "Hiragino Sans GB",
+                 "Microsoft YaHei", "Source Han Sans", sans-serif;
+    background: #F5F0E4;
+    color: #2b2b2b;
+    display: flex;
+    justify-content: center;
+    padding: 24px 16px;
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .page { max-width: 440px; width: 100%; }
+
+  .type-card {
+    background: #FFFDF5;
+    border-radius: 6px;
+    padding: 32px 28px 28px;
+    box-shadow: 0 2px 12px rgba(60, 50, 30, 0.08);
+    text-align: center;
+  }
+  .type-card .tip { font-size: 14px; color: #6b6b6b; margin-bottom: 8px; letter-spacing: 0.3px; }
+  .type-card .cn-name {
+    font-size: 40px; font-weight: 900; color: #1c1c1c;
+    letter-spacing: 2px; margin: 4px 0 6px; display: inline-block;
+    padding: 0 6px;
+    background: linear-gradient(transparent 55%, #FFE066 55%, #FFE066 92%, transparent 92%);
+  }
+  .type-card .code { font-size: 32px; font-weight: 800; color: #1c1c1c; letter-spacing: 3px; margin-top: 2px; }
+  .type-card .mascot {
+    width: 150px; height: 150px; margin: 24px auto 4px;
+    background: #F0E9D6; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 78px; line-height: 1;
+    box-shadow: inset 0 2px 6px rgba(0,0,0,0.05);
+  }
+  .type-card .source { font-size: 11px; color: #8b8578; margin-top: 14px; letter-spacing: 0.5px; }
+
+  .user-bar {
+    background: #FFFDF5; margin-top: 14px; padding: 14px 20px;
+    border-radius: 6px; display: flex; align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 2px 12px rgba(60, 50, 30, 0.06);
+  }
+  .user-bar .who { font-size: 15px; font-weight: 700; color: #1c1c1c; }
+  .user-bar .who small { display: block; font-size: 11px; font-weight: 400; color: #7a7368; margin-top: 2px; }
+  .user-bar .match { font-size: 20px; font-weight: 900; color: #d9a900; text-align: right; }
+  .user-bar .match small { display: block; font-size: 10px; font-weight: 400; color: #8b8578; letter-spacing: 0.3px; }
+
+  .section {
+    background: #FFFDF5; margin-top: 14px; padding: 22px 22px 24px;
+    border-radius: 6px; box-shadow: 0 2px 12px rgba(60, 50, 30, 0.06);
+  }
+  .section-label {
+    font-size: 13px; font-weight: 700; color: #6b5d44;
+    margin-bottom: 14px; letter-spacing: 1px;
+  }
+
+  .desc-block .code-line { font-size: 18px; font-weight: 800; color: #1c1c1c; letter-spacing: 2px; margin-bottom: 4px; }
+  .desc-block .cn-line { font-size: 16px; font-weight: 700; margin-bottom: 14px; }
+  .desc-block .cn-line span {
+    background: linear-gradient(transparent 60%, #FFE066 60%, #FFE066 92%, transparent 92%);
+    padding: 0 3px;
+  }
+  .desc-block .body {
+    font-size: 14.5px; line-height: 1.95; color: #2b2b2b;
+    text-align: justify; letter-spacing: 0.2px;
+  }
+  .desc-block .body strong {
+    background: linear-gradient(transparent 60%, #FFE066 60%, #FFE066 92%, transparent 92%);
+    font-weight: inherit; padding: 0 2px;
+  }
+
+  .dim-list .group { margin-bottom: 18px; }
+  .dim-list .group:last-child { margin-bottom: 0; }
+  .dim-list .group-title {
+    font-size: 12px; font-weight: 700; color: #8b7a55;
+    margin-bottom: 8px; padding-bottom: 4px;
+    border-bottom: 1px dashed #e5dcc4; letter-spacing: 0.5px;
+  }
+  .dim-list .row {
+    display: flex; align-items: baseline; gap: 10px;
+    padding: 6px 0; font-size: 13px; line-height: 1.6;
+  }
+  .dim-list .row .n { color: #4a4a4a; font-weight: 600; min-width: 88px; flex-shrink: 0; }
+  .dim-list .row .lv { font-weight: 800; width: 18px; text-align: center; flex-shrink: 0; }
+  .dim-list .row .lv.H { color: #d9a900; }
+  .dim-list .row .lv.M { color: #8b8578; }
+  .dim-list .row .lv.L { color: #b8b0a0; }
+  .dim-list .row .desc { color: #5a5346; flex: 1; font-size: 12.5px; }
+
+  .quotes .quote {
+    font-size: 13.5px; line-height: 1.85; color: #3a3a3a;
+    padding: 10px 0; border-bottom: 1px dashed #e5dcc4;
+  }
+  .quotes .quote:last-child { border-bottom: none; padding-bottom: 0; }
+  .quotes .quote::before {
+    content: '"'; color: #d9a900; font-size: 28px;
+    line-height: 0; vertical-align: -10px; margin-right: 4px; font-weight: 900;
+  }
+
+  .footer {
+    text-align: center; padding: 24px 16px 12px;
+    font-size: 11px; color: #8b8578; line-height: 1.8;
+  }
+  .footer .brand {
+    font-weight: 900; letter-spacing: 3px; color: #6b5d44;
+    font-size: 13px; margin-bottom: 4px;
+  }
+
+  .floating-save {
+    position: fixed; top: 20px; right: 20px;
+    background: #1c1c1c; color: #FFE066; border: none;
+    border-radius: 999px; padding: 12px 20px;
+    font-size: 14px; font-weight: 700; font-family: inherit;
+    cursor: pointer;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    z-index: 9999;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .floating-save:hover { transform: translateY(-2px); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.25); }
+  .floating-save:active { transform: translateY(0); }
+  .floating-save.saving { background: #6b5d44; color: #FFFDF5; pointer-events: none; }
+  .screenshotting .floating-save { display: none; }
+</style>
+</head>
+<body>
+
+<button class="floating-save" id="save-btn">📸 保存为图片</button>
+
+<div class="page">
+
+  <div class="type-card">
+    <div class="tip">你的人格类型是:</div>
+    <div class="cn-name">{{CN_NAME}}</div>
+    <div class="code">{{CODE}}</div>
+    <div class="mascot">{{MASCOT}}</div>
+    <div class="source">{{SOURCE_LINE}}</div>
+  </div>
+
+  <div class="user-bar">
+    <div class="who">{{SCREEN_NAME}}<small>{{BIO}}</small></div>
+    <div class="match">{{MATCH}}%<small>match</small></div>
+  </div>
+
+  <div class="section desc-block">
+    <div class="section-label">人 格 描 述</div>
+    <div class="code-line">{{CODE}}</div>
+    <div class="cn-line"><span>{{CN_NAME}}</span></div>
+    <div class="body">{{PERSONALITY_DESCRIPTION}}</div>
+  </div>
+
+  <div class="section desc-block">
+    <div class="section-label">AI 整 体 印 象</div>
+    <div class="body">{{OVERALL_IMPRESSION}}</div>
+  </div>
+
+  <div class="section">
+    <div class="section-label">15 维 画 像</div>
+    <div class="dim-list">
+{{DIM_GROUPS_HTML}}
+    </div>
+  </div>
+
+  <div class="section quotes">
+    <div class="section-label">高 信 息 量 证 据</div>
+{{QUOTES_HTML}}
+  </div>
+
+  <div class="footer">
+    <div class="brand">SBTI × {{PLATFORM_LABEL}}</div>
+    Silly Big Personality Test<br>
+    基于授权的公开动态生成 · 仅供娱乐 · 零科学依据
+  </div>
+
+</div>
+
+<script type="module">
+  import { toPng } from 'https://esm.sh/html-to-image@1.11.13';
+  const btn = document.getElementById('save-btn');
+  const page = document.querySelector('.page');
+  btn.addEventListener('click', async () => {
+    btn.classList.add('saving');
+    btn.textContent = '生成中...';
+    document.body.classList.add('screenshotting');
+    try {
+      const dataUrl = await toPng(page, {
+        pixelRatio: 2,
+        backgroundColor: '#F5F0E4',
+        cacheBust: true,
+      });
+      const link = document.createElement('a');
+      const ts = new Date().toISOString().slice(0, 10);
+      link.download = `sbti-{{FILE_STEM}}-${ts}.png`;
+      link.href = dataUrl;
+      link.click();
+      btn.textContent = '✅ 已保存';
+      setTimeout(() => { btn.textContent = '📸 保存为图片'; btn.classList.remove('saving'); }, 1500);
+    } catch (err) {
+      console.error(err);
+      btn.textContent = '❌ 失败,请重试';
+      btn.classList.remove('saving');
+      setTimeout(() => { btn.textContent = '📸 保存为图片'; }, 2000);
+    } finally {
+      document.body.classList.remove('screenshotting');
+    }
+  });
+</script>
+</body>
+</html>

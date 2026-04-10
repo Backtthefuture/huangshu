@@ -7,8 +7,9 @@
 | Skill | 说明 | 使用场景 | 安装命令 |
 |-------|------|---------|---------|
 | [私董会（advisory-board）](skills/advisory-board/) | 12 位顶级思想家组成的商业决策智囊团 | 面临重大商业决策，需要多视角碰撞 | `npx skills add Backtthefuture/huangshu` |
+| [Social-SBTI（social-sbti）](skills/social-sbti/) | 基于社交媒体公开动态生成恶搞人格卡（27 型 × 15 维） | 给自己或公开公众人物做娱乐向人格画像 | `npx skills add Backtthefuture/huangshu` |
 
-> 安装命令由 [Vercel Labs `skills`](https://github.com/vercel-labs/skills) 提供，运行后按提示选择 Skill、安装范围（全局 / 项目）和目标 Agent（Claude Code、Cursor、GitHub Copilot 等 40+ AI 编程助手）即可。目前合集中只有 **advisory-board** 一个 Skill，命令会自动定位到它。
+> 安装命令由 [Vercel Labs `skills`](https://github.com/vercel-labs/skills) 提供，运行后按提示选择 Skill、安装范围（全局 / 项目）和目标 Agent（Claude Code、Cursor、GitHub Copilot 等 40+ AI 编程助手）即可。
 
 ## 🛠️ 工具（Tools）
 
@@ -75,6 +76,58 @@ Phase 4  交锋        →  2-3 个分歧点的深度碰撞
 Phase 5  决议        →  共识 / 分歧 / 风险地图 / 行动建议
 Phase 6  可视化报告   →  生成交互式 HTML 网页（可选）
 ```
+
+---
+
+## Social-SBTI（社交版恶搞人格测试）
+
+**一句话介绍**：MBTI 已经过时，SBTI 来了。读一个人的社交媒体公开动态，由 Claude 本人按 15 维度打分，匹配出 27 种恶搞人格里的一个（CTRL 拿捏者 / BOSS 领导者 / SHIT 愤世者 / DEAD 死者……），并生成一张可截图分享的竖版 HTML 卡片。
+
+> ⚠️ **仅供娱乐**。只分析你自己或明确授权的公开公众人物，拒绝分析前任、同事、面试官、投资人、相亲对象。详见 [`skills/social-sbti/docs/DISCLAIMER.md`](skills/social-sbti/docs/DISCLAIMER.md)。
+
+### 核心特色
+
+- **27 种人格 × 15 维体系**：自我 / 情感 / 态度 / 行动驱力 / 社交 五组模型
+- **Claude 本人打分，零 API key 门槛**：Claude Code 里的 Claude 直接读动态、对照 [`SCORING_RUBRIC.md`](skills/social-sbti/docs/SCORING_RUBRIC.md) 打 L/M/H
+- **每张卡都是"本人定制版"**：描述文案基于对象身上的具体事实现场生成，不套通用模板
+- **硬约束打分一致性**：每维必引 `post_id`、反向证据降档、置信度<0.4 强制回退 M
+- **合规前置**：skill 入口就拒绝私人/非公开对象分析
+- **HTML 分享卡片**：暖黄底色、雷达图、15 维解读、高信息量原话引用，自带"📸 保存为图片"按钮
+
+### 触发方式
+
+```
+帮我用 social-sbti 分析 @AI产品黄叔（即刻）
+给 vista8 来个社交版 SBTI
+我把动态 JSON 给你了，帮我打个 SBTI 分
+```
+
+### 5 步流程
+
+```
+Step 1  确认对象 & 授权    →  合规检查，确保是本人或公开公众人物
+Step 2  抓取动态           →  即刻 / X fetcher，统一 schema 到 sbti-output/
+Step 3  Claude 直接打分    →  15 维 L/M/H + 证据 post_id + 定制描述
+Step 4  匹配人格模板        →  曼哈顿距离 + 精确匹配数排序
+Step 5  渲染 HTML + PNG    →  竖版卡片落到 sbti-output/
+```
+
+### 手动安装
+
+```bash
+git clone https://github.com/Backtthefuture/huangshu.git
+cp -r huangshu/skills/social-sbti your-project/skills/
+pip install -r skills/social-sbti/requirements.txt
+```
+
+然后在项目 `CLAUDE.md` 中引用：
+
+```markdown
+## Skills
+- social-sbti：`skills/social-sbti/SKILL.md`
+```
+
+更多细节见 [`skills/social-sbti/README.md`](skills/social-sbti/README.md)。
 
 ---
 
