@@ -8,6 +8,7 @@ import fs from 'fs'
 import { skillRoutes } from './routes/skills.js'
 import { manageRoutes } from './routes/manage.js'
 import { versionRoutes } from './routes/versions.js'
+import { similarityRoutes } from './routes/similarity.js'
 import { startWatcher } from './scanner/watcher.js'
 import { invalidateCache } from './routes/skills.js'
 import { fullScan } from './scanner/discovery.js'
@@ -23,6 +24,7 @@ await app.register(websocket)
 await app.register(skillRoutes)
 await app.register(manageRoutes)
 await app.register(versionRoutes)
+await app.register(similarityRoutes)
 
 // Health check
 app.get('/api/health', async () => ({ status: 'ok' }))

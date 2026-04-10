@@ -7,10 +7,11 @@ import { Sidebar } from './components/Sidebar'
 import { SkillGrid } from './components/SkillGrid'
 import { SkillDetail } from './components/SkillDetail'
 import { Dashboard } from './components/Dashboard'
+import { SimilarView } from './components/SimilarView'
 import type { Skill } from './hooks/useSkills'
 
 type GroupBy = 'none' | 'scope' | 'source' | 'project'
-type View = 'skills' | 'dashboard'
+type View = 'skills' | 'similar' | 'dashboard'
 
 function App() {
   const { allSkills, skills, stats, projects, conflicts, loading, error, scan, filterSkills } = useSkills()
@@ -140,6 +141,14 @@ function App() {
                 Skills
               </button>
               <button
+                onClick={() => setView('similar')}
+                className={`px-3 py-1 rounded-md text-xs transition-all ${
+                  view === 'similar' ? 'bg-slate-700 text-slate-200 shadow-sm' : 'text-slate-500 hover:text-slate-300'
+                }`}
+              >
+                相似检测
+              </button>
+              <button
                 onClick={() => setView('dashboard')}
                 className={`px-3 py-1 rounded-md text-xs transition-all ${
                   view === 'dashboard' ? 'bg-slate-700 text-slate-200 shadow-sm' : 'text-slate-500 hover:text-slate-300'
@@ -237,6 +246,8 @@ function App() {
         {/* Dashboard view */}
         {view === 'dashboard' ? (
           <Dashboard stats={stats} projects={projects} conflicts={conflicts} skills={allSkills} />
+        ) : view === 'similar' ? (
+          <SimilarView onSkillClick={setSelectedSkill} />
         ) : (
           <>
             {/* Mobile search */}
