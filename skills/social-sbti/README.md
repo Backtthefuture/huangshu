@@ -194,6 +194,41 @@ sbti-output/
 
 **别 commit 这两个文件**。如果凭证过期,直接重跑阶段 4 对应的配置流程即可。
 
+## Troubleshooting
+
+### `jike-skill[qr]` 装不上 / "No matching distribution"
+
+这个包**没有发布到 PyPI**,真实源在 `github.com/MidnightDarling/jike-skill`。
+最新版本的 `sbti doctor --fix` 已经会自动用 git URL 装,但如果你手动装:
+
+```bash
+pip install 'jike-skill[qr] @ git+https://github.com/MidnightDarling/jike-skill.git'
+```
+
+### macOS Homebrew Python / PEP 668 "externally-managed-environment"
+
+Homebrew 的 Python 3.11+ 默认拒绝 `pip install`(PEP 668),会抛
+`externally-managed-environment` 错。`sbti doctor --fix` 已经会在第一次失败时
+自动加 `--user --break-system-packages` 重试。如果手动装:
+
+```bash
+pip3 install --user --break-system-packages \
+  'jike-skill[qr] @ git+https://github.com/MidnightDarling/jike-skill.git'
+```
+
+### `jike-auth: command not found`
+
+`pip install --user` 会把 `jike-auth` 二进制扔到
+`~/Library/Python/3.x/bin`(macOS),而这个目录默认不在 shell PATH 里。
+**不要**手动 export PATH —— 直接用 skill 自带的包装命令:
+
+```bash
+"$SBTI_HOME/bin/sbti" jike-auth > ~/.config/sbti/jike-tokens.json
+```
+
+`sbti jike-auth` 会自己去 `site.getuserbase()/bin` 找这个二进制,再 execv
+过去,完全不依赖 PATH。
+
 ## 为什么这样设计
 
 - **向导式一条路走到底**: 触发 → 选平台 → 贴 URL,用户只打 3 次字(首次多 1-2 次配凭证)

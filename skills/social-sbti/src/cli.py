@@ -19,7 +19,10 @@ from __future__ import annotations
 
 import argparse
 import json
+import os
 import re
+import shutil
+import site
 import sys
 from pathlib import Path
 
@@ -178,6 +181,47 @@ def cmd_fetch(args: argparse.Namespace) -> int:
     return 1
 
 
+# ============= jike-auth subcommand =============
+
+def _locate_jike_auth() -> str | None:
+    """Find the jike-auth binary.
+
+    Search order:
+      1. $PATH via shutil.which
+      2. user-site bin (e.g. ~/Library/Python/3.14/bin on macOS Homebrew,
+         where `pip install --user` lands when PEP 668 applies)
+    """
+    exe = shutil.which("jike-auth")
+    if exe:
+        return exe
+    candidate = Path(site.getuserbase()) / "bin" / "jike-auth"
+    if candidate.exists() and os.access(candidate, os.X_OK):
+        return str(candidate)
+    return None
+
+
+def cmd_jike_auth(args: argparse.Namespace) -> int:
+    """Locate and exec jike-auth, preserving stdin/stdout/stderr.
+
+    Use this instead of calling `jike-auth` directly — it handles the case
+    where `pip install --user` put the binary in a user-site bin that's not
+    on PATH (very common on macOS Homebrew Python under PEP 668).
+
+    The child inherits this process's stdout, so the caller can redirect:
+        sbti jike-auth > ~/.config/sbti/jike-tokens.json
+    """
+    exe = _locate_jike_auth()
+    if not exe:
+        print(
+            "✗ 找不到 jike-auth。先跑: sbti doctor --fix\n"
+            "  (会从 github.com/MidnightDarling/jike-skill 装)",
+            file=sys.stderr,
+        )
+        return 2
+    os.execv(exe, [exe])
+    return 0  # unreachable
+
+
 # ============= finalize subcommand =============
 
 def cmd_finalize(args: argparse.Namespace) -> int:
@@ -263,6 +307,9 @@ def build_parser() -> argparse.ArgumentParser:
     fin.add_argument("scores_file")
     fin.add_argument("--no-png", action="store_true")
 
+    # jike-auth (wraps jike-skill's jike-auth binary, handles PATH resolution)
+    sub.add_parser("jike-auth", help="扫码登录即刻 (tokens → stdout)")
+
     return ap
 
 
@@ -283,6 +330,8 @@ def main(argv: list[str] | None = None) -> int:
         return cmd_fetch(args)
     if args.cmd == "finalize":
         return cmd_finalize(args)
+    if args.cmd == "jike-auth":
+        return cmd_jike_auth(args)
 
     ap.print_help()
     return 1

@@ -140,8 +140,13 @@ output 文件(QR + 进度):
 
 ```bash
 mkdir -p ~/.config/sbti && rm -f ~/.config/sbti/jike-tokens.json && \
-jike-auth > ~/.config/sbti/jike-tokens.json
+"$SBTI_HOME/bin/sbti" jike-auth > ~/.config/sbti/jike-tokens.json
 ```
+
+**⚠️ 一定要用 `sbti jike-auth` 而不是裸的 `jike-auth`**。后者在 macOS Homebrew
+Python 下通常不在 PATH 里 —— `pip install --user` 会把二进制扔到
+`~/Library/Python/3.x/bin`,而这个目录默认没被 shell 拾到。`sbti jike-auth`
+会自己定位到正确的二进制再 execv 过去,不依赖 PATH。
 
 调用 Bash 工具时**务必传 `run_in_background: true`**,记下返回的 task id 和
 output 文件路径。

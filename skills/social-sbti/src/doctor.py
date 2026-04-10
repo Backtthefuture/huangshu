@@ -12,18 +12,23 @@ from __future__ import annotations
 
 import argparse
 import importlib.util
+import os
 import shutil
+import site
 import subprocess
 import sys
 from pathlib import Path
 
 import config  # type: ignore  # same-dir import
 
+# jike-skill 未发布到 PyPI,直接从 GitHub 装
+JIKE_GIT_SPEC = "jike-skill[qr] @ git+https://github.com/MidnightDarling/jike-skill.git"
+
 ESSENTIAL_PACKAGES = [
-    # (import_name, pip_name, 说明)
-    ("jike",       "jike-skill[qr]",  "即刻 fetcher"),
-    ("twikit",     "twikit",          "X fetcher"),
-    ("playwright", "playwright",      "HTML → PNG 渲染"),
+    # (import_name, pip_spec_for_install, display_name, label)
+    ("jike",       JIKE_GIT_SPEC,  "jike-skill[qr]", "即刻 fetcher"),
+    ("twikit",     "twikit",       "twikit",         "X fetcher"),
+    ("playwright", "playwright",   "playwright",     "HTML → PNG 渲染"),
 ]
 
 GREEN = "\033[32m"
@@ -38,6 +43,40 @@ BAD = f"{RED}✗{RESET}"
 
 def _has_module(name: str) -> bool:
     return importlib.util.find_spec(name) is not None
+
+
+def _user_site_bin() -> Path:
+    return Path(site.getuserbase()) / "bin"
+
+
+def _pip_install(pip_spec: str) -> int:
+    """Install a package, retrying with --user --break-system-packages on PEP 668.
+
+    Homebrew Python / Debian / system pythons mark themselves as
+    externally-managed (PEP 668) and refuse `pip install` without a venv.
+    Falling back to `--user --break-system-packages` is the least-surprising
+    thing for a skill that wants to Just Work.
+    """
+    base = [sys.executable, "-m", "pip", "install"]
+    rc = subprocess.call(base + [pip_spec])
+    if rc == 0:
+        return 0
+    print(f"{DIM}  retry with --user --break-system-packages{RESET}")
+    return subprocess.call(base + ["--user", "--break-system-packages", pip_spec])
+
+
+def _warn_user_site_path() -> None:
+    """If a user-site `bin/` holds jike-auth but is not on PATH, print how to fix."""
+    user_bin = _user_site_bin()
+    if not (user_bin / "jike-auth").exists():
+        return
+    path_parts = os.environ.get("PATH", "").split(os.pathsep)
+    if str(user_bin) in path_parts:
+        return
+    print(f"\n{YELLOW}⚠ jike-auth 已装到 {user_bin},但不在 PATH 中。{RESET}")
+    print(f"  永久生效(下次新终端):")
+    print(f"    echo 'export PATH=\"{user_bin}:$PATH\"' >> ~/.zshrc")
+    print(f"  本次会话 skill 会用 `sbti jike-auth` 包装命令自动定位,不用改 PATH。")
 
 
 def _playwright_chromium_installed() -> bool:
@@ -81,13 +120,13 @@ def run(argv: list[str] | None = None) -> int:
         errors += 1
 
     # 包依赖
-    missing: list[tuple[str, str]] = []
-    for mod, pkg, label in ESSENTIAL_PACKAGES:
+    missing: list[tuple[str, str, str]] = []  # (mod, pip_spec, display)
+    for mod, pip_spec, display, label in ESSENTIAL_PACKAGES:
         if _has_module(mod):
             print(f" {OK} {label:<18} ({mod})")
         else:
-            print(f" {BAD} {label:<18} 缺: pip install {pkg}")
-            missing.append((mod, pkg))
+            print(f" {BAD} {label:<18} 缺: pip install {display}")
+            missing.append((mod, pip_spec, display))
             errors += 1
 
     # playwright chromium
@@ -132,17 +171,17 @@ def run(argv: list[str] | None = None) -> int:
     # --fix: 装缺失的包
     if args.fix and missing:
         print(f"\n{YELLOW}▶ 自动修复: 安装缺失的包...{RESET}")
-        pip = [sys.executable, "-m", "pip", "install"]
-        for mod, pkg in missing:
-            print(f"{DIM}  pip install {pkg}{RESET}")
-            rc = subprocess.call(pip + [pkg])
+        for mod, pip_spec, display in missing:
+            print(f"{DIM}  pip install {display}{RESET}")
+            rc = _pip_install(pip_spec)
             if rc != 0:
-                print(f" {BAD} {pkg} 装失败")
+                print(f" {BAD} {display} 装失败")
                 return 2
         # 如果装了 playwright,再尝试装 chromium
-        if any(mod == "playwright" for mod, _ in missing):
+        if any(mod == "playwright" for mod, _, _ in missing):
             print(f"{DIM}  playwright install chromium{RESET}")
             subprocess.call([sys.executable, "-m", "playwright", "install", "chromium"])
+        _warn_user_site_path()
         print(f"{GREEN}✓ 依赖已就绪,请重新跑 sbti doctor 确认{RESET}")
         return 0
 

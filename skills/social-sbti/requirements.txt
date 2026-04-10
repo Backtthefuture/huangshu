@@ -1,8 +1,8 @@
 # skill 核心(match / make_card / personalities / cli / config / doctor)是零依赖的标准库。
 # 下面三个是抓取 + 渲染必需的,首次使用 sbti doctor --fix 会自动装。
 
-# 即刻 fetcher(必需)
-jike-skill[qr]>=0.1.0
+# 即刻 fetcher(必需)。未发布到 PyPI,从 GitHub 装。
+jike-skill[qr] @ git+https://github.com/MidnightDarling/jike-skill.git
 
 # X/Twitter fetcher(必需)
 twikit>=2.0.0
