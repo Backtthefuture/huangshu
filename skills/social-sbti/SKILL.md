@@ -121,33 +121,81 @@ echo "SBTI_HOME=$SBTI_HOME"
 
 ## 阶段 4 · 首次配置凭证(只执行一次)
 
-### 4A · 即刻分支
+### 4A · 即刻分支(**全程在对话里完成,不要让用户离开**)
 
-**台词**:
+`jike-auth` 是交互式扫码工具:把 QR(unicode 块字符组成的 ASCII 二维码)和
+进度信息打到 stderr,扫完把 tokens 以 JSON 形式打到 stdout。你要在**后台**
+跑它,把 stderr 里的 QR 原样贴到对话里让用户用手机 App 扫。
+
+**台词 1**(短,给 QR 让位置):
 
 ```
-首次使用即刻,我需要你扫码拿 token。请打开**另一个终端**,跑:
-
-    jike-auth > ~/.config/sbti/jike-tokens.json
-
-- 会打印一个二维码,用即刻 App 扫一下
-- 扫完自动把 access_token / refresh_token 写到那个 JSON 文件
-- 完成后回来告诉我一声
+首次扫码拿 token,马上显示二维码。
 ```
 
-**等用户回**: "好了" / "done" / 类似
+**执行步骤(严格按序)**:
 
-**执行**:
+**① 在后台启动 jike-auth**,stdout 重定向到 inbox(tokens),stderr 去后台任务
+output 文件(QR + 进度):
+
+```bash
+mkdir -p ~/.config/sbti && rm -f ~/.config/sbti/jike-tokens.json && \
+jike-auth > ~/.config/sbti/jike-tokens.json
+```
+
+调用 Bash 工具时**务必传 `run_in_background: true`**,记下返回的 task id 和
+output 文件路径。
+
+**② 等 2-3 秒**让 jike-auth 把 QR 打出来,然后用 `Read` 工具读 output 文件。
+你会看到类似:
+
+```
+[+] Session: 642d995d-31a6-...
+ ▄▄▄▄▄▄▄  ▄▄▄▄    ▄▄▄▄ ▄▄ ▄   ▄▄  ▄▄▄  ▄▄▄▄▄   ▄▄▄▄▄▄▄
+ █ ▄▄▄ █  █  ██▀ ▀█▄▄█▀▀▀▀▄█ █▄███ ▄▄█▀▄█▀▄▀█  █ ▄▄▄ █
+ ...约 25 行 QR...
+ ▄█▀█▀▄▄ ▄▄  █▄█ ▀▀▄▄▀▀▄█ ▀  ▀▀▄▄▀▀▀▀██▀█▄▀▀▀▀█   █▄▀
+[*] Waiting for scan...
+```
+
+如果还没看到 `Waiting for scan...`,再等 1 秒重读。
+
+**③ 把整段 QR 原样贴到对话里**(从 `[+] Session:` 那行开始到 `Waiting for scan` 之前的
+所有块字符行)。**用代码块包起来**,前后加空行:
+
+```
+<原样粘贴 stderr 内容>
+```
+
+然后紧跟一句:
+> 👆 请用**即刻 App** 扫上面这个二维码。扫完我这里会自动继续,不用切回来告诉我。
+
+**④ 等后台任务结束**。两种方式:
+- 调 `TaskOutput` 工具 `block: true, timeout: 120000`(给用户 2 分钟扫码)
+- 或者每 3 秒 `Read` 一次 `~/.config/sbti/jike-tokens.json`,文件一旦存在且非空
+  就说明扫完了
+
+**⑤ 确认 tokens 到位**:
 
 ```bash
 "$SBTI_HOME/bin/sbti" config jike --from-inbox
 ```
 
-**成功**: tokens 已落到 `~/.config/sbti/config.json`,inbox 文件自动删除。回阶段 3 重跑 doctor 确认全绿。
+这会把 jike-tokens.json 吸入 config.json 并删掉原文件。输出应该是
+`✓ 即刻 tokens 已从 inbox 导入`。
 
-**失败**:
-- `jike-tokens.json 不存在` → 用户还没跑 jike-auth,再等一下
-- `格式错误` → jike-auth 中途挂了,让用户重跑
+**⑥ 回阶段 3 重跑一次 doctor** 确认凭证已 ✓,进阶段 5。
+
+**失败分支**:
+
+| 症状 | 处理 |
+|---|---|
+| 等了 2 分钟没扫 → 任务退出 1 | 告诉用户"扫码超时了,要不要再试一次?",确认后回步骤 ① |
+| jike-tokens.json 存在但 `config jike --from-inbox` 报格式错误 | jike-auth 中途挂了,`rm` 掉文件从 ① 重来 |
+| 后台任务 output 文件迟迟没有 QR 块字符 | jike-auth 可能卡在网络,`TaskStop` 掉,提示用户检查网络后重试 |
+
+**⚠️ 不要退化成"请用户开另一个终端跑 jike-auth"**。这个 skill 承诺全流程在
+对话里完成,后台 + QR 回显是标准路径。
 
 ### 4B · X 分支
 
