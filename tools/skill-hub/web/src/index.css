@@ -1,0 +1,218 @@
+@import "tailwindcss";
+
+/*
+ * 主题系统：通过反转 Tailwind slate 色阶实现日/夜模式
+ * 默认 = 夜间模式
+ * html.light = 日间模式
+ */
+
+html.light {
+  /* 反转 slate 色阶 */
+  --color-slate-950: #f8fafc;
+  --color-slate-900: #ffffff;
+  --color-slate-800: #f1f5f9;
+  --color-slate-700: #e2e8f0;
+  --color-slate-600: #94a3b8;
+  --color-slate-500: #64748b;
+  --color-slate-400: #475569;
+  --color-slate-300: #334155;
+  --color-slate-200: #1e293b;
+  --color-slate-100: #0f172a;
+  --color-slate-50: #020617;
+}
+
+/* ============================================
+ * 日间模式：针对性优化
+ * ============================================ */
+
+/* --- 1. 边框：提高可见度 --- */
+html.light [class*="border-slate-800"],
+html.light [class*="border-slate-700"] {
+  border-color: #e2e8f0;
+}
+html.light .border-slate-700\/50,
+html.light .border-slate-700\/70,
+html.light .border-slate-800\/40,
+html.light .border-slate-800\/60,
+html.light .border-slate-800\/80 {
+  border-color: #e2e8f0;
+}
+
+/* --- 2. 强调色文字：更深以提高可读性 --- */
+html.light .text-indigo-400 { color: #4f46e5; }
+html.light .text-purple-400 { color: #7c3aed; }
+html.light .text-cyan-400 { color: #0891b2; }
+html.light .text-green-400 { color: #059669; }
+html.light .text-amber-400 { color: #b45309; }
+html.light .text-red-400 { color: #dc2626; }
+html.light .text-yellow-400 { color: #ca8a04; }
+html.light .text-pink-400 { color: #db2777; }
+html.light .text-indigo-500 { color: #4338ca; }
+
+/* --- 3. 徽章半透明底色：改用更柔和的浅色 --- */
+html.light .bg-indigo-500\/20 { background-color: #e0e7ff; }
+html.light .bg-indigo-600\/20 { background-color: #e0e7ff; }
+html.light .bg-indigo-600\/15 { background-color: #eef2ff; }
+html.light .bg-indigo-500\/10 { background-color: #eef2ff; }
+html.light .bg-purple-500\/20 { background-color: #ede9fe; }
+html.light .bg-cyan-500\/20 { background-color: #cffafe; }
+html.light .bg-green-500\/20 { background-color: #d1fae5; }
+html.light .bg-green-600\/20 { background-color: #d1fae5; }
+html.light .bg-amber-500\/20 { background-color: #fef3c7; }
+html.light .bg-amber-500\/10 { background-color: #fef3c7; }
+html.light .bg-amber-600\/20 { background-color: #fef3c7; }
+html.light .bg-red-500\/20 { background-color: #fee2e2; }
+html.light .bg-red-500\/10 { background-color: #fef2f2; }
+html.light .bg-red-600\/20 { background-color: #fee2e2; }
+html.light .bg-pink-500\/20 { background-color: #fce7f3; }
+html.light .bg-yellow-500\/20 { background-color: #fef3c7; }
+
+/* --- 4. Stats 卡片渐变：替换为清爽的浅色背景 --- */
+html.light [class*="from-slate-800"][class*="to-slate-800"] {
+  background-image: none;
+  background-color: #ffffff;
+}
+html.light [class*="from-indigo-950"] {
+  background-image: none;
+  background-color: #eef2ff;
+}
+html.light [class*="from-amber-950"] {
+  background-image: none;
+  background-color: #fffbeb;
+}
+html.light [class*="from-cyan-950"] {
+  background-image: none;
+  background-color: #ecfeff;
+}
+html.light [class*="from-green-950"] {
+  background-image: none;
+  background-color: #ecfdf5;
+}
+
+/* --- 5. 卡片背景：纯白 + 阴影 --- */
+html.light .bg-slate-800\/40,
+html.light .bg-slate-800\/50,
+html.light .bg-slate-900\/30,
+html.light .bg-slate-900\/50 {
+  background-color: #ffffff;
+}
+
+html.light .bg-slate-950\/50 {
+  background-color: #f8fafc;
+}
+
+/* 卡片阴影 */
+html.light .rounded-xl.border,
+html.light .rounded-lg.border {
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04), 0 1px 3px rgba(15, 23, 42, 0.06);
+}
+html.light .rounded-xl.border:hover {
+  box-shadow: 0 2px 4px rgba(15, 23, 42, 0.06), 0 4px 12px rgba(15, 23, 42, 0.08);
+}
+
+/* --- 6. hover 状态：明显的灰色反馈 --- */
+html.light .hover\:bg-slate-800:hover,
+html.light .hover\:bg-slate-800\/40:hover,
+html.light .hover\:bg-slate-800\/60:hover,
+html.light .hover\:bg-slate-800\/80:hover,
+html.light .hover\:bg-slate-900\/60:hover {
+  background-color: #f1f5f9;
+}
+html.light .hover\:bg-slate-700:hover {
+  background-color: #e2e8f0;
+}
+
+/* --- 7. Header 背景 --- */
+html.light .bg-slate-950\/80,
+html.light .bg-slate-950\/90 {
+  background-color: rgba(248, 250, 252, 0.85);
+  backdrop-filter: blur(12px);
+}
+
+/* --- 8. 输入框边框 --- */
+html.light input,
+html.light textarea {
+  background-color: #ffffff !important;
+  border-color: #e2e8f0;
+}
+html.light input::placeholder,
+html.light textarea::placeholder {
+  color: #94a3b8;
+}
+
+/* --- 9. 按钮组背景（视图切换器等） --- */
+html.light .bg-slate-900.rounded-lg.border {
+  background-color: #f1f5f9;
+}
+
+/* --- 10. 分隔线 --- */
+html.light .divide-slate-800\/60 > * + * {
+  border-top-color: #e2e8f0;
+}
+
+/* --- 11. Diff Viewer --- */
+html.light .bg-green-500\/8 { background-color: #dcfce7 !important; }
+html.light .bg-red-500\/8 { background-color: #fee2e2 !important; }
+html.light .text-green-300 { color: #166534; }
+html.light .text-red-300 { color: #991b1b; }
+
+/* --- 12. 模态框遮罩 --- */
+html.light .bg-black\/60 {
+  background-color: rgba(15, 23, 42, 0.5);
+}
+
+/* --- 13. 编辑器深色背景 --- */
+html.light .bg-slate-950 {
+  background-color: #f8fafc;
+}
+
+/* --- 14. 代码块 --- */
+html.light pre {
+  background-color: #f8fafc !important;
+  color: #334155;
+}
+html.light pre.text-cyan-300 {
+  color: #0e7490 !important;
+}
+
+/* --- 15. 禁用卡片的 opacity --- */
+html.light .opacity-60 {
+  opacity: 0.75;
+}
+
+/* ============================================
+ * 基础样式
+ * ============================================ */
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* 滚动条 */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: #334155;
+  border-radius: 3px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #64748b;
+}
+
+html.light ::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+}
+html.light ::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}

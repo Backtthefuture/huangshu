@@ -18,6 +18,16 @@ npx skills add Backtthefuture/huangshu
 |-------|------|---------|
 | [私董会（advisory-board）](skills/advisory-board/) | 12 位顶级思想家组成的商业决策智囊团 | 面临重大商业决策，需要多视角碰撞 |
 
+## 🛠️ 工具（Tools）
+
+除了 Skill 本体，这里还收录黄叔自用的 Skill 周边工具。
+
+| 工具 | 说明 | 启动方式 |
+|-----|------|---------|
+| [Skill Hub](tools/skill-hub/) | 本地 Web UI，扫描全机器所有 Claude Skills，可视化编辑、去重、版本快照 | `npx github:Backtthefuture/skillmanager` |
+
+> 一行 `npx` 命令走的是独立仓库 [`skillmanager`](https://github.com/Backtthefuture/skillmanager)（npx 不支持从 monorepo 子目录拉取）。`tools/skill-hub/` 是源码镜像，方便在合集里查阅和贡献。
+
 ---
 
 ## 私董会（Advisory Board）

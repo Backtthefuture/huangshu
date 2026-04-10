@@ -1,0 +1,54 @@
+{
+  "name": "claude-skill-hub",
+  "version": "1.0.0",
+  "description": "Claude Code Skill Manager - 一键扫描并管理所有 Claude Agent Skills",
+  "type": "module",
+  "bin": {
+    "claude-skill-hub": "bin/cli.js",
+    "skill-hub": "bin/cli.js"
+  },
+  "files": [
+    "bin",
+    "dist",
+    "server",
+    "web",
+    "tsconfig.json",
+    "tsconfig.server.json",
+    "vite.config.ts"
+  ],
+  "scripts": {
+    "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
+    "dev:server": "tsx watch server/index.ts",
+    "dev:web": "vite",
+    "build": "vite build && tsc -p tsconfig.server.json --noCheck",
+    "start": "node dist/server/index.js",
+    "prepare": "node bin/prepare.js"
+  },
+  "dependencies": {
+    "fastify": "^5.3.3",
+    "@fastify/static": "^8.1.0",
+    "@fastify/cors": "^11.0.1",
+    "@fastify/websocket": "^11.0.2",
+    "gray-matter": "^4.0.3",
+    "chokidar": "^4.0.3",
+    "glob": "^11.0.2"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.3",
+    "tsx": "^4.19.4",
+    "concurrently": "^9.1.2",
+    "vite": "^6.3.4",
+    "@vitejs/plugin-react": "^4.4.1",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@types/node": "^22.15.3",
+    "tailwindcss": "^4.1.4",
+    "@tailwindcss/vite": "^4.1.4",
+    "lucide-react": "^0.509.0"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
