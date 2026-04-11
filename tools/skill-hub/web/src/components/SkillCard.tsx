@@ -4,6 +4,9 @@ import type { Skill } from '../hooks/useSkills'
 interface SkillCardProps {
   skill: Skill
   onClick?: (skill: Skill) => void
+  selectMode?: boolean
+  selected?: boolean
+  onSelectToggle?: (skill: Skill) => void
 }
 
 function asText(v: unknown): string {
@@ -17,19 +20,47 @@ function asText(v: unknown): string {
   }
 }
 
-export function SkillCard({ skill, onClick }: SkillCardProps) {
+export function SkillCard({ skill, onClick, selectMode, selected, onSelectToggle }: SkillCardProps) {
   const name = asText(skill.name)
   const description = asText(skill.description)
   const model = asText(skill.frontmatter?.model)
+
+  const handleClick = () => {
+    if (selectMode) {
+      onSelectToggle?.(skill)
+    } else {
+      onClick?.(skill)
+    }
+  }
+
   return (
     <div
-      onClick={() => onClick?.(skill)}
+      onClick={handleClick}
       className={`group relative rounded-xl border p-4 cursor-pointer transition-all duration-200
-        ${skill.enabled
-          ? 'border-slate-700/50 bg-slate-800/40 hover:border-indigo-500/50 hover:bg-slate-800/80'
-          : 'border-slate-800/50 bg-slate-900/40 opacity-60 hover:opacity-80'
+        ${selected
+          ? 'border-indigo-500 bg-indigo-500/10 ring-2 ring-indigo-500/40'
+          : skill.enabled
+            ? 'border-slate-700/50 bg-slate-800/40 hover:border-indigo-500/50 hover:bg-slate-800/80'
+            : 'border-slate-800/50 bg-slate-900/40 opacity-60 hover:opacity-80'
         }`}
     >
+      {/* Selection checkbox overlay */}
+      {selectMode && (
+        <div
+          className={`absolute top-2 left-2 w-5 h-5 rounded-md border-2 flex items-center justify-center transition-all ${
+            selected
+              ? 'bg-indigo-600 border-indigo-600'
+              : 'bg-slate-900/80 border-slate-600 group-hover:border-slate-400'
+          }`}
+        >
+          {selected && (
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" className="text-white">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+          )}
+        </div>
+      )}
+
       {/* Conflict indicator */}
       {skill.hasConflict && (
         <div className="absolute -top-1.5 -right-1.5 w-3 h-3 rounded-full bg-amber-500 ring-2 ring-slate-900" />

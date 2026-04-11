@@ -187,6 +187,54 @@ export async function manageRoutes(app: FastifyInstance) {
       return { ok: false, error: err?.message || '删除失败' }
     }
   })
+
+  // Batch delete — move many skills to trash in one call
+  app.post<{
+    Body: { items: { id: string; path: string; skillName?: string }[] }
+  }>('/api/skills/batch/delete', async (req, reply) => {
+    const items = Array.isArray(req.body?.items) ? req.body.items : []
+    if (items.length === 0) {
+      reply.status(400)
+      return { ok: false, error: '未提供要删除的 skill' }
+    }
+
+    const results: {
+      id: string
+      skillName?: string
+      ok: boolean
+      trashId?: string
+      error?: string
+    }[] = []
+
+    for (const item of items) {
+      if (!item || typeof item.path !== 'string') {
+        results.push({ id: item?.id || '(unknown)', ok: false, error: '参数不完整' })
+        continue
+      }
+      try {
+        const meta = await moveToTrash(item.path, item.skillName)
+        results.push({
+          id: item.id,
+          skillName: item.skillName,
+          ok: true,
+          trashId: meta.id,
+        })
+      } catch (err: any) {
+        results.push({
+          id: item.id,
+          skillName: item.skillName,
+          ok: false,
+          error: err?.message || '删除失败',
+        })
+      }
+    }
+
+    invalidateCache()
+
+    const okCount = results.filter((r) => r.ok).length
+    const failCount = results.length - okCount
+    return { ok: failCount === 0, okCount, failCount, results }
+  })
 }
 
 async function copyDir(src: string, dest: string): Promise<void> {

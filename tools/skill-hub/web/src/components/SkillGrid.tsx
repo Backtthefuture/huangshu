@@ -5,6 +5,9 @@ interface SkillGridProps {
   skills: Skill[]
   groupBy: 'none' | 'scope' | 'source' | 'project'
   onSkillClick: (skill: Skill) => void
+  selectMode?: boolean
+  selectedIds?: Set<string>
+  onSelectToggle?: (skill: Skill) => void
 }
 
 const groupLabels: Record<string, Record<string, string>> = {
@@ -22,7 +25,18 @@ const groupLabels: Record<string, Record<string, string>> = {
   },
 }
 
-export function SkillGrid({ skills, groupBy, onSkillClick }: SkillGridProps) {
+export function SkillGrid({ skills, groupBy, onSkillClick, selectMode, selectedIds, onSelectToggle }: SkillGridProps) {
+  const renderCard = (s: Skill) => (
+    <SkillCard
+      key={s.id}
+      skill={s}
+      onClick={onSkillClick}
+      selectMode={selectMode}
+      selected={selectedIds?.has(s.id) ?? false}
+      onSelectToggle={onSelectToggle}
+    />
+  )
+
   if (skills.length === 0) {
     return (
       <div className="flex items-center justify-center h-48">
@@ -34,9 +48,7 @@ export function SkillGrid({ skills, groupBy, onSkillClick }: SkillGridProps) {
   if (groupBy === 'none') {
     return (
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-        {skills.map((s) => (
-          <SkillCard key={s.id} skill={s} onClick={onSkillClick} />
-        ))}
+        {skills.map(renderCard)}
       </div>
     )
   }
@@ -79,9 +91,7 @@ export function SkillGrid({ skills, groupBy, onSkillClick }: SkillGridProps) {
             <div className="flex-1 h-px bg-slate-800/60" />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-3">
-            {groupSkills.map((s) => (
-              <SkillCard key={s.id} skill={s} onClick={onSkillClick} />
-            ))}
+            {groupSkills.map(renderCard)}
           </div>
         </div>
       ))}
