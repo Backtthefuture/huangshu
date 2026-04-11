@@ -21,8 +21,7 @@
     "dev:server": "tsx watch server/index.ts",
     "dev:web": "vite",
     "build": "vite build && tsc -p tsconfig.server.json --noCheck",
-    "start": "node dist/server/index.js",
-    "prepare": "node bin/prepare.js"
+    "start": "node dist/server/index.js"
   },
   "dependencies": {
     "fastify": "^5.3.3",

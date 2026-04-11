@@ -16,22 +16,21 @@ Skill Hub 是一个本地 Web UI：扫描全盘、聚合展示、可视化编辑
 ## 快速开始（一行命令）
 
 ```bash
-npm install -g github:Backtthefuture/skillmanager && skill-hub
+npm install -g https://github.com/Backtthefuture/skillmanager/raw/main/release/claude-skill-hub.tgz && skill-hub
 ```
 
 首次运行会自动：
-1. 下载代码并全局安装
-2. 安装依赖
-3. 构建前端与服务端
-4. 启动服务并打开浏览器到 `http://localhost:3456`
+1. 下载预构建的 tarball 并全局安装
+2. 安装运行期依赖
+3. 启动服务并打开浏览器到 `http://localhost:3456`
 
 **之后每次启动只要敲 `skill-hub` 就行**，不用再打这串长命令。
 
 要求：Node.js ≥ 20。
 
-> **说明**：一行命令走的是独立仓库 [`skillmanager`](https://github.com/Backtthefuture/skillmanager)（npm 不支持从 monorepo 子目录安装）。本目录是源码镜像，方便你在 `huangshu` 合集里查阅和修改。
+> **为什么用 tarball URL 而不是 `github:user/repo`**：npm 11 + node 24 在 macOS 上通过 `npm install -g github:...` 全局安装时，会把包软链到 `~/.npm/_cacache/tmp/` 里的临时克隆目录，随后临时目录被清理、留下悬空符号链接导致 `skill-hub` 无法运行。直接装预构建 tarball 走的是真正的文件拷贝路径，完全绕开这个 bug。
 >
-> **更新到最新版**：`npm install -g github:Backtthefuture/skillmanager` 再跑一次即可。
+> **更新到最新版**：再跑一次同样的命令即可。
 >
 > **卸载**：`npm uninstall -g claude-skill-hub`。
 
