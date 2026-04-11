@@ -255,12 +255,39 @@ async function discoverProjects(): Promise<{ name: string; path: string }[]> {
 }
 
 /**
- * Find every `skills/` directory inside ~/.claude/plugins (recursively, shallow).
- * Claude Code plugins can put skills at varying depths, so we walk up to 4 levels.
+ * Find every `skills/` directory that belongs to a plugin the user has
+ * actually enabled.
+ *
+ * Claude Code tracks enabled plugins in ~/.claude/plugins/config.json under
+ * `repositories`. Anything living only under ~/.claude/plugins/marketplaces/
+ * is a *candidate* from a marketplace — Claude Code does not load those, they
+ * are just the source catalog. Earlier versions of this scanner walked the
+ * entire plugins/ tree and reported those candidates as installed plugin
+ * skills, which was very confusing for users who had never enabled a plugin.
  */
 async function discoverPluginSkillDirs(): Promise<string[]> {
   const result: string[] = []
   const pluginsRoot = path.join(homedir, '.claude', 'plugins')
+  const configPath = path.join(pluginsRoot, 'config.json')
+
+  // Extract installLocation of every enabled plugin.
+  const installLocations: string[] = []
+  try {
+    const raw = await fs.readFile(configPath, 'utf-8')
+    const config = JSON.parse(raw) as { repositories?: Record<string, unknown> }
+    const repos = config?.repositories || {}
+    for (const meta of Object.values(repos)) {
+      if (meta && typeof meta === 'object') {
+        const loc = (meta as { installLocation?: unknown }).installLocation
+        if (typeof loc === 'string' && loc.length > 0) {
+          installLocations.push(loc)
+        }
+      }
+    }
+  } catch {}
+
+  // No plugins enabled → nothing to scan. Skip the marketplace catalog entirely.
+  if (installLocations.length === 0) return result
 
   async function walk(dir: string, depth: number) {
     if (depth > 4) return
@@ -282,9 +309,14 @@ async function discoverPluginSkillDirs(): Promise<string[]> {
     }
   }
 
-  if (await dirExists(pluginsRoot)) {
-    await walk(pluginsRoot, 0)
+  // Only walk inside each enabled plugin's install location, not the whole
+  // plugins/ tree.
+  for (const loc of installLocations) {
+    if (await dirExists(loc)) {
+      await walk(loc, 0)
+    }
   }
+
   return result
 }
 
