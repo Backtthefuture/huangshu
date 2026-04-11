@@ -238,10 +238,13 @@ async function discoverProjects(): Promise<{ name: string; path: string }[]> {
     } catch {}
   }
 
-  // 3. CWD + walk up 3 levels
+  // 3. CWD + walk up 3 levels — skip the user's home directory, whose
+  //    `.claude/skills/` etc. are the *global* paths, not project paths.
+  //    Running `skill-hub` from home otherwise causes every global skill to
+  //    be double-counted as "lhc (cwd)/<agent>" in the scan report.
   let cwd = process.cwd()
   for (let i = 0; i < 4; i++) {
-    if (await hasAnyAgentSkills(cwd)) {
+    if (cwd !== homedir && (await hasAnyAgentSkills(cwd))) {
       if (!projects.some((p) => p.path === cwd)) {
         projects.push({ name: path.basename(cwd) + ' (cwd)', path: cwd })
       }
