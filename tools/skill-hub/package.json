@@ -17,6 +17,7 @@
     "vite.config.ts"
   ],
   "scripts": {
+    "prepare": "node bin/prepare.js",
     "dev": "concurrently \"npm run dev:server\" \"npm run dev:web\"",
     "dev:server": "tsx watch server/index.ts",
     "dev:web": "vite",
