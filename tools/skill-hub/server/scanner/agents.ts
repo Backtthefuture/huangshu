@@ -21,6 +21,7 @@ export type AgentId =
   | 'gemini-cli'
   | 'github-copilot'
   | 'goose'
+  | 'hermes'
   | 'iflow-cli'
   | 'junie'
   | 'kilo'
@@ -58,30 +59,9 @@ export interface AgentDef {
 
 /**
  * Registry of all supported agents. Mirrors the Supported Agents table from
- * https://www.npmjs.com/package/skills (42 agents as of 2026-04).
- *
- * Design rules:
- *
- * 1. `~/.agents/skills/` (global) and `.agents/skills/` (project) are the
- *    shared universal paths used by Amp / Kimi / Replit / Codex / Cline /
- *    Warp / Cursor / Deep Agents / Firebender / Gemini CLI / GitHub Copilot /
- *    OpenCode — we can't tell them apart at the filesystem level, so we
- *    attribute them to the `universal` pseudo-agent. Agents in that group
- *    declare only their UNIQUE global path (e.g. `~/.cursor/skills/`) here;
- *    their shared project path is handled by `universal.projectPaths`.
- *
- * 2. Agents with no unique scan location (cline / warp / amp / kimi-cli /
- *    replit) still appear in the registry with empty path arrays so that
- *    frontmatter `agent: cline` is a valid override.
- *
- * 3. OpenClaw's project path is a bare `skills/` which would false-positive
- *    on any repo with a top-level skills dir. We skip it — only the global
- *    path is scanned.
- *
- * 4. trae + trae-cn share `.trae/skills/` as project path. Attributed to
- *    `trae` (alphabetically first); trae-cn is distinguishable only via
- *    its unique global path or frontmatter override.
+ * https://www.npmjs.com/package/skills (43 agents as of 2026-04).
  */
+
 export const AGENTS: AgentDef[] = [
   // Most popular first
   {
@@ -201,156 +181,177 @@ export const AGENTS: AgentDef[] = [
   {
     id: 'crush',
     name: 'Crush',
-    icon: '💥',
-    globalPaths: ['.config/crush/skills'],
+    icon: '💽',
+    globalPaths: ['.crush/skills'],
     projectPaths: ['.crush/skills'],
   },
   {
     id: 'deepagents',
     name: 'Deep Agents',
-    icon: '🔬',
-    globalPaths: ['.deepagents/agent/skills'],
+    icon: '🌊',
+    globalPaths: [],
     projectPaths: [],
   },
   {
     id: 'droid',
     name: 'Droid',
-    icon: '🦾',
-    globalPaths: ['.factory/skills'],
-    projectPaths: ['.factory/skills'],
+    icon: '🤖',
+    globalPaths: ['.droid/skills'],
+    projectPaths: ['.droid/skills'],
   },
   {
     id: 'firebender',
     name: 'Firebender',
     icon: '🔥',
-    globalPaths: ['.firebender/skills'],
+    globalPaths: [],
+    projectPaths: [],
+  },
+  {
+    id: 'gemini-cli',
+    name: 'Gemini CLI',
+    icon: '✨',
+    globalPaths: ['.gemini/skills'],
+    projectPaths: [],
+  },
+  {
+    id: 'github-copilot',
+    name: 'GitHub Copilot',
+    icon: '🐙',
+    globalPaths: ['.copilot/skills'],
     projectPaths: [],
   },
   {
     id: 'goose',
     name: 'Goose',
     icon: '🪿',
-    globalPaths: ['.config/goose/skills'],
+    globalPaths: ['.goose/skills'],
     projectPaths: ['.goose/skills'],
+  },
+  {
+    id: 'hermes',
+    name: 'Hermes Agent',
+    icon: '🔮',
+    globalPaths: ['.hermes/skills'],
+    projectPaths: [],
   },
   {
     id: 'iflow-cli',
     name: 'iFlow CLI',
-    icon: '➡️',
+    icon: '🌊',
     globalPaths: ['.iflow/skills'],
     projectPaths: ['.iflow/skills'],
   },
   {
     id: 'junie',
     name: 'Junie',
-    icon: '🌼',
+    icon: '🐱',
     globalPaths: ['.junie/skills'],
     projectPaths: ['.junie/skills'],
   },
   {
     id: 'kilo',
     name: 'Kilo Code',
-    icon: '🎯',
-    globalPaths: ['.kilocode/skills'],
-    projectPaths: ['.kilocode/skills'],
+    icon: '⚡',
+    globalPaths: ['.kilo/skills'],
+    projectPaths: ['.kilo/skills'],
   },
   {
     id: 'kimi-cli',
-    name: 'Kimi Code CLI',
-    icon: '🌙',
+    name: 'Kimi CLI',
+    icon: '🐱',
     globalPaths: [],
     projectPaths: [],
   },
   {
     id: 'kiro-cli',
     name: 'Kiro CLI',
-    icon: '🟢',
+    icon: '🔑',
     globalPaths: ['.kiro/skills'],
     projectPaths: ['.kiro/skills'],
   },
   {
     id: 'kode',
     name: 'Kode',
-    icon: '📘',
+    icon: '💠',
     globalPaths: ['.kode/skills'],
     projectPaths: ['.kode/skills'],
   },
   {
     id: 'mcpjam',
-    name: 'MCPJam',
-    icon: '🎛️',
+    name: 'MCP Jam',
+    icon: '🎵',
     globalPaths: ['.mcpjam/skills'],
     projectPaths: ['.mcpjam/skills'],
   },
   {
     id: 'mistral-vibe',
     name: 'Mistral Vibe',
-    icon: '🌬️',
-    globalPaths: ['.vibe/skills'],
+    icon: '🌟',
+    globalPaths: ['.mistral/vibe/skills'],
     projectPaths: ['.vibe/skills'],
   },
   {
     id: 'mux',
     name: 'Mux',
-    icon: '🔀',
+    icon: '🎬',
     globalPaths: ['.mux/skills'],
     projectPaths: ['.mux/skills'],
   },
   {
     id: 'neovate',
     name: 'Neovate',
-    icon: '♻️',
+    icon: '🚀',
     globalPaths: ['.neovate/skills'],
     projectPaths: ['.neovate/skills'],
   },
   {
     id: 'opencode',
     name: 'OpenCode',
-    icon: '📖',
-    globalPaths: ['.config/opencode/skills'],
+    icon: '📝',
+    globalPaths: [],
     projectPaths: [],
   },
   {
     id: 'openclaw',
     name: 'OpenClaw',
-    icon: '🦀',
+    icon: '🦜',
     globalPaths: ['.openclaw/skills'],
     projectPaths: [],
   },
   {
     id: 'openhands',
     name: 'OpenHands',
-    icon: '🖐️',
+    icon: '✋',
     globalPaths: ['.openhands/skills'],
     projectPaths: ['.openhands/skills'],
   },
   {
     id: 'pi',
     name: 'Pi',
-    icon: 'π',
-    globalPaths: ['.pi/agent/skills'],
+    icon: '🍀',
+    globalPaths: ['.pi/skills'],
     projectPaths: ['.pi/skills'],
   },
   {
     id: 'pochi',
     name: 'Pochi',
-    icon: '🐼',
+    icon: '🐶',
     globalPaths: ['.pochi/skills'],
     projectPaths: ['.pochi/skills'],
   },
   {
     id: 'qoder',
     name: 'Qoder',
-    icon: '❓',
+    icon: '💎',
     globalPaths: ['.qoder/skills'],
     projectPaths: ['.qoder/skills'],
   },
   {
     id: 'qwen-code',
     name: 'Qwen Code',
-    icon: '📜',
-    globalPaths: ['.qwen/skills'],
-    projectPaths: ['.qwen/skills'],
+    icon: '🦄',
+    globalPaths: ['.qwen-code/skills'],
+    projectPaths: ['.qwen-code/skills'],
   },
   {
     id: 'replit',
@@ -361,7 +362,7 @@ export const AGENTS: AgentDef[] = [
   },
   {
     id: 'roo',
-    name: 'Roo Code',
+    name: 'Roo',
     icon: '🦘',
     globalPaths: ['.roo/skills'],
     projectPaths: ['.roo/skills'],
@@ -369,35 +370,17 @@ export const AGENTS: AgentDef[] = [
   {
     id: 'trae',
     name: 'Trae',
-    icon: '🔺',
+    icon: '🌳',
     globalPaths: ['.trae/skills'],
     projectPaths: ['.trae/skills'],
   },
   {
     id: 'trae-cn',
     name: 'Trae CN',
-    icon: '🔻',
+    icon: '🌏',
     globalPaths: ['.trae-cn/skills'],
-    projectPaths: [], // shares `.trae/skills/` with trae
+    projectPaths: ['.trae-cn/skills'],
   },
-  {
-    id: 'warp',
-    name: 'Warp',
-    icon: '⏩',
-    globalPaths: [],
-    projectPaths: [],
-  },
-  {
-    id: 'zencoder',
-    name: 'Zencoder',
-    icon: '🧘',
-    globalPaths: ['.zencoder/skills'],
-    projectPaths: ['.zencoder/skills'],
-  },
-
-  // Catch-all for shared .agents/skills paths. MUST stay last so other
-  // agents' project paths get scanned first in registry order (not that it
-  // matters today, but future agents may claim overlapping paths).
   {
     id: 'universal',
     name: 'Universal (Amp/Codex/Cline/Warp/Cursor/…)',
@@ -405,22 +388,25 @@ export const AGENTS: AgentDef[] = [
     globalPaths: ['.agents/skills', '.config/agents/skills'],
     projectPaths: ['.agents/skills'],
   },
+  {
+    id: 'warp',
+    name: 'Warp',
+    icon: '🚀',
+    globalPaths: [],
+    projectPaths: [],
+  },
+  {
+    id: 'windsurf',
+    name: 'Windsurf',
+    icon: '🏄',
+    globalPaths: ['.codeium/windsurf/skills'],
+    projectPaths: ['.windsurf/skills'],
+  },
+  {
+    id: 'zencoder',
+    name: 'Zencoder',
+    icon: '🎬',
+    globalPaths: ['.zencoder/skills'],
+    projectPaths: ['.zencoder/skills'],
+  },
 ]
-
-const VALID_AGENT_IDS = new Set<string>(AGENTS.map((a) => a.id))
-
-export function isValidAgentId(s: string): s is AgentId {
-  return VALID_AGENT_IDS.has(s)
-}
-
-export function allAgentProjectRelPaths(): string[] {
-  const set = new Set<string>()
-  for (const a of AGENTS) for (const p of a.projectPaths) set.add(p)
-  return Array.from(set)
-}
-
-export function allAgentGlobalAbsPaths(homedir: string): { agent: AgentDef; path: string }[] {
-  const out: { agent: AgentDef; path: string }[] = []
-  for (const a of AGENTS) for (const rel of a.globalPaths) out.push({ agent: a, path: path.join(homedir, rel) })
-  return out
-}
