@@ -21,6 +21,7 @@ export type AgentId =
   | 'gemini-cli'
   | 'github-copilot'
   | 'goose'
+  | 'hermes'
   | 'iflow-cli'
   | 'junie'
   | 'kilo'
@@ -232,6 +233,13 @@ export const AGENTS: AgentDef[] = [
     icon: '🪿',
     globalPaths: ['.config/goose/skills'],
     projectPaths: ['.goose/skills'],
+  },
+  {
+    id: 'hermes',
+    name: 'Hermes Agent',
+    icon: '🔮',
+    globalPaths: ['.hermes/skills'],
+    projectPaths: [],
   },
   {
     id: 'iflow-cli',
