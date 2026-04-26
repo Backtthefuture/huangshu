@@ -8,8 +8,11 @@
 |-------|------|---------|---------|
 | [私董会（advisory-board）](skills/advisory-board/) | 12 位顶级思想家组成的商业决策智囊团 | 面临重大商业决策，需要多视角碰撞 | `npx skills add Backtthefuture/huangshu --skill advisory-board -a claude-code -g -y` |
 | [Social-SBTI（social-sbti）](skills/social-sbti/) | 基于社交媒体公开动态生成恶搞人格卡（27 型 × 15 维） | 给自己或公开公众人物做娱乐向人格画像 | `npx skills add Backtthefuture/huangshu --skill social-sbti -a claude-code -g -y` |
+| [视频逐字稿（video-transcript）](skills/video-transcript/) | B 站/抖音/小红书/YouTube 视频自动转严格逐字稿（豆包视频理解，headless 后台抓取，长视频自动分段） | 把视频内容转成可搜索/可引用的文字稿，做笔记、做素材、做总结 | `bash <(curl -fsSL https://raw.githubusercontent.com/Backtthefuture/huangshu/main/skills/video-transcript/bootstrap.sh)` |
 
 > 点击 Skill 名称进入对应目录，里面有**核心特色 / 触发方式 / 运行效果 / 手动安装**的完整说明。
+>
+> **video-transcript 用 `bootstrap.sh` 而不是 `npx skills add`** —— 因为它需要装系统依赖（ffmpeg / Chromium）和配豆包 API Key，引导脚本会一条龙搞定。如果你只想拉 skill 文件不要安装向导，也可以用 `npx skills add Backtthefuture/huangshu --skill video-transcript -a claude-code -g -y`，然后手动跑 `~/.claude/skills/video-transcript/install.sh`。
 
 **⚠️ `-a claude-code` 这个参数不能省**。`npx skills add` 是 [Vercel Labs `skills`](https://github.com/vercel-labs/skills) CLI，支持 40+ AI 编程助手，**默认装到通用路径 `.agents/skills/`**，而 Claude Code 只扫 `~/.claude/skills/`（全局）和 `.claude/skills/`（项目）两个位置。不加 `-a claude-code` 的话，skill 装了但 Claude Code 看不见。
 

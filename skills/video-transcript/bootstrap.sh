@@ -1,0 +1,102 @@
+#!/usr/bin/env bash
+# video-transcript skill 一行命令安装入口
+#
+# 用法:
+#   bash <(curl -fsSL https://raw.githubusercontent.com/Backtthefuture/huangshu/main/skills/video-transcript/bootstrap.sh)
+#
+# 流程: 拉 skill 文件 → 跑 install.sh(装系统依赖 + 配 API Key)
+#
+# 兜底顺序: npx skills add → git sparse-checkout → tarball
+
+set -e
+
+REPO="Backtthefuture/huangshu"
+SKILL="video-transcript"
+TARGET="$HOME/.claude/skills/$SKILL"
+
+C_BOLD='\033[1m'; C_GREEN='\033[32m'; C_YELLOW='\033[33m'; C_RED='\033[31m'; C_BLUE='\033[34m'; C_GRAY='\033[90m'; C_RESET='\033[0m'
+say()  { printf "${C_BLUE}▸${C_RESET} %s\n" "$1"; }
+ok()   { printf "  ${C_GREEN}✓${C_RESET} %s\n" "$1"; }
+warn() { printf "  ${C_YELLOW}⚠${C_RESET} %s\n" "$1"; }
+err()  { printf "  ${C_RED}✗${C_RESET} %s\n" "$1"; }
+bar()  { printf "${C_GRAY}═══════════════════════════════════════════════════════${C_RESET}\n"; }
+
+bar
+printf "${C_BOLD}  🎬 video-transcript skill 安装引导${C_RESET}\n"
+bar
+echo ""
+
+# ── 已安装则提示 ─────────────────────────────────────────
+if [ -d "$TARGET" ]; then
+  warn "已检测到 $TARGET 存在"
+  printf "  覆盖重装? [y/N]: "
+  read -r yn < /dev/tty || yn=""
+  case "$yn" in
+    [Yy]*) say "覆盖中,删除旧目录..."; rm -rf "$TARGET" ;;
+    *) say "保留现有 skill,只跑 install.sh 重新配置"
+       bash "$TARGET/install.sh"
+       exit 0 ;;
+  esac
+fi
+
+mkdir -p "$HOME/.claude/skills"
+
+# ── 三档兜底拉 skill 文件 ────────────────────────────────
+fetched=""
+
+# 档 1: npx skills add(huangshu 推荐方式,需要 node/npx)
+if [ -z "$fetched" ] && command -v npx >/dev/null 2>&1; then
+  say "用 npx skills add 拉 skill..."
+  if npx -y skills add "$REPO" --skill "$SKILL" -a claude-code -g -y 2>&1; then
+    if [ -d "$TARGET" ] && [ -f "$TARGET/SKILL.md" ]; then
+      fetched="npx"
+      ok "通过 npx skills 拉到 $TARGET"
+    fi
+  fi
+  [ -z "$fetched" ] && warn "npx skills 失败,尝试下一档..."
+fi
+
+# 档 2: git sparse-checkout(只拉这个 skill 子目录,省流量)
+if [ -z "$fetched" ] && command -v git >/dev/null 2>&1; then
+  say "用 git sparse-checkout 拉 skill..."
+  TMP=$(mktemp -d)
+  if git clone --depth=1 --filter=blob:none --sparse "https://github.com/$REPO.git" "$TMP/repo" 2>&1; then
+    (cd "$TMP/repo" && git sparse-checkout set "skills/$SKILL")
+    if [ -d "$TMP/repo/skills/$SKILL" ]; then
+      mv "$TMP/repo/skills/$SKILL" "$TARGET"
+      rm -rf "$TMP"
+      fetched="git"
+      ok "通过 git sparse-checkout 拉到 $TARGET"
+    fi
+  fi
+  [ -z "$fetched" ] && { rm -rf "$TMP"; warn "git 失败,尝试下一档..."; }
+fi
+
+# 档 3: tarball(终极兜底,无需 git/node)
+if [ -z "$fetched" ]; then
+  say "用 tarball 下载..."
+  TMP=$(mktemp -d)
+  if curl -fsSL "https://github.com/$REPO/archive/refs/heads/main.tar.gz" | tar xz -C "$TMP" 2>&1; then
+    SUBDIR=$(find "$TMP" -maxdepth 2 -type d -name "$SKILL" | head -1)
+    if [ -n "$SUBDIR" ] && [ -d "$SUBDIR" ]; then
+      mv "$SUBDIR" "$TARGET"
+      rm -rf "$TMP"
+      fetched="tarball"
+      ok "通过 tarball 拉到 $TARGET"
+    fi
+  fi
+fi
+
+if [ -z "$fetched" ]; then
+  err "三种方式都失败了!"
+  err "请手动 git clone 后跑: bash <skill-dir>/install.sh"
+  err "  git clone https://github.com/$REPO ~/Downloads/huangshu"
+  err "  cp -r ~/Downloads/huangshu/skills/$SKILL $TARGET"
+  err "  bash $TARGET/install.sh"
+  exit 1
+fi
+
+echo ""
+say "进入安装向导(装系统依赖 + 配豆包 API Key)..."
+echo ""
+bash "$TARGET/install.sh"
