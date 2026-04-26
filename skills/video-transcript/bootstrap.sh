@@ -21,6 +21,39 @@ warn() { printf "  ${C_YELLOW}⚠${C_RESET} %s\n" "$1"; }
 err()  { printf "  ${C_RED}✗${C_RESET} %s\n" "$1"; }
 bar()  { printf "${C_GRAY}═══════════════════════════════════════════════════════${C_RESET}\n"; }
 
+# ── Codex 集成:检测到 ~/.codex/ 就注册 /video-transcript ──
+register_codex() {
+  local codex_home="${CODEX_HOME:-$HOME/.codex}"
+  if [ ! -d "$codex_home" ]; then
+    printf "  ${C_GRAY}ℹ${C_RESET} 未检测到 ~/.codex/,跳过 Codex 集成(只 Claude Code 可用)\n"
+    return 0
+  fi
+  mkdir -p "$codex_home/prompts"
+  cat > "$codex_home/prompts/video-transcript.md" <<'PROMPT_EOF'
+You are a video transcript extractor. The user provides a video URL
+(B站 / 抖音 / 小红书 / YouTube) or a local file path as $ARGUMENTS.
+
+Run this command, streaming both stderr and stdout:
+
+    python3 ~/.claude/skills/video-transcript/scripts/transcript.py "$ARGUMENTS"
+
+Behavior contract:
+1. The script prints a 📊 评估表 to stderr early on. As soon as you see it,
+   tell the user the title, duration, segment count, and 预估耗时 — so they
+   know how long to wait.
+2. When the script finishes, the FULL markdown transcript is on stdout,
+   starting with a `# <title>` heading. You MUST display the entire transcript
+   verbatim — every section with its `[MM:SS - MM:SS]` header. Do NOT summarize.
+   Do NOT only say "saved to xxx.md".
+3. End your reply with one short line noting the saved .md path.
+
+If the script fails with missing dependencies, suggest the user run:
+    bash ~/.claude/skills/video-transcript/install.sh
+PROMPT_EOF
+  ok "已注册 Codex 命令 → $codex_home/prompts/video-transcript.md"
+  printf "  ${C_GRAY}  在 Codex 里可用 /video-transcript <URL> 触发${C_RESET}\n"
+}
+
 bar
 printf "${C_BOLD}  🎬 video-transcript skill 安装引导${C_RESET}\n"
 bar
@@ -35,6 +68,8 @@ if [ -d "$TARGET" ]; then
     [Yy]*) say "覆盖中,删除旧目录..."; rm -rf "$TARGET" ;;
     *) say "保留现有 skill,只跑 install.sh 重新配置"
        bash "$TARGET/install.sh"
+       echo ""
+       register_codex
        exit 0 ;;
   esac
 fi
@@ -100,3 +135,6 @@ echo ""
 say "进入安装向导(装系统依赖 + 配豆包 API Key)..."
 echo ""
 bash "$TARGET/install.sh"
+
+echo ""
+register_codex
