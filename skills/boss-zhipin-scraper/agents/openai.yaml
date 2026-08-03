@@ -1,0 +1,4 @@
+interface:
+  display_name: "BOSS 求职助手"
+  short_description: "先校准真实 JD，再按目标数量持续触达合适岗位"
+  default_prompt: "使用 $boss-zhipin-scraper 校准真实 JD，询问我本批目标招呼数，并在确认后持续触达达标岗位。"

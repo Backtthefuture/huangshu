@@ -9,6 +9,7 @@
 | [私董会（advisory-board）](skills/advisory-board/) | 请 12 位顶级思想家从不同角度帮你拆问题 | 面临重大商业决策，需要多视角碰撞 |
 | [Social-SBTI（social-sbti）](skills/social-sbti/) | 根据公开社交动态生成娱乐向人格画像卡 | 给自己或公开公众人物做娱乐向人格画像 |
 | [视频逐字稿（video-transcript）](skills/video-transcript/) | 把 B 站/抖音/小红书/YouTube 视频转成可搜索、可引用的逐字稿 | 做笔记、做素材、做总结 |
+| [BOSS 求职助手（boss-zhipin-scraper）](skills/boss-zhipin-scraper/) | 校准真实 JD，按确认的数量和档位持续筛选并触达岗位 | 在 BOSS 直聘搜索、分析和联系适合自己的岗位 |
 
 点击 Skill 名称可以看完整说明。新手只需要看下面这段安装命令。
 
@@ -32,6 +33,20 @@ npx skills add Backtthefuture/huangshu --skill social-sbti -a claude-code -g -y
 
 ```bash
 bash <(curl -fsSL https://raw.githubusercontent.com/Backtthefuture/huangshu/main/skills/video-transcript/bootstrap.sh)
+```
+
+### BOSS 求职助手
+
+在 Codex 中直接粘贴下面这句话：
+
+```text
+请使用 skill-installer 安装这个 Skill：https://github.com/Backtthefuture/huangshu/tree/main/skills/boss-zhipin-scraper
+```
+
+也可以在终端执行：
+
+```bash
+python3 ~/.codex/skills/.system/skill-installer/scripts/install-skill-from-github.py --url https://github.com/Backtthefuture/huangshu/tree/main/skills/boss-zhipin-scraper
 ```
 
 ## 这些命令是什么意思
